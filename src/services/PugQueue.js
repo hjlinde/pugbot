@@ -42,8 +42,8 @@ export class PugQueue {
     })
 
     const channel = member.guild.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
-    channel.send(The players for this game are:\n${mentions})
-	  channel.send('Nominate captains and draft teams. This channel will be deleted in an hour.')
+    	channel.send('The players for this game are:\n${mentions}')
+	channel.send('Nominate captains and draft teams. This channel will be deleted in an hour.')
     // Empty queue
     this.queue.length = 0
   }
