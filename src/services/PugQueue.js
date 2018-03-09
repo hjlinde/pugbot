@@ -41,11 +41,12 @@ export class PugQueue {
       mentions += `${member}\n`
     })
 
-    const channel = client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
-    	channel.send(`The players for this game are:\n${mentions}`)
+    // Announce game start
+    const announce_channel = client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
+    	announce_channel.send(`The players for this game are:\n${mentions}`)
     
-    const channel = client.channels.get(process.env.PUGS_CHANNEL)
-      channel.send('Lets go!')
+    const pugs_channel = client.channels.get(process.env.PUGS_CHANNEL)
+      pugs_channel.send('Lets go!')
     
     // Empty queue
     this.queue.length = 0
