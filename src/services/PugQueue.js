@@ -41,7 +41,7 @@ export class PugQueue {
       mentions += `${member}\n`
     })
 
-    const channel = guild.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
+    const channel = client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
     	channel.send('The players for this game are:\n${mentions}')
     // Empty queue
     this.queue.length = 0
