@@ -41,20 +41,9 @@ export class PugQueue {
       mentions += `${member}\n`
     })
 
-    guild.createChannel(tempChannelName, 'text').then((channel) => {
-      channel.send(`The players for this game are:\n${mentions}`)
-
-      channel.send('Nominate captains and draft teams. This channel will be deleted in an hour.')
-
-      // Start timer to delete channel
-      setTimeout(() => {
-        channel.delete()
-            .then(console.log(`Deleted channel ${tempChannelName}`))
-      }, process.env.TEMP_CHANNEL_LIFETIME)
-
-      channel.guild.channels.get(process.env.PUGS_CHANNEL).send(`Game ready to start, draft teams in channel ${channel}.`)
-    })
-
+    const channel = member.guild.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
+    channel.send(The players for this game are:\n${mentions})
+	  channel.send('Nominate captains and draft teams. This channel will be deleted in an hour.')
     // Empty queue
     this.queue.length = 0
   }
