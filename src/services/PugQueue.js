@@ -42,11 +42,15 @@ export class PugQueue {
     })
 
     // Announce game start
-    const announce_channel = client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
-    	announce_channel.send(`The players for this game are:\n${mentions}`)
+    const announce_channel = guild.client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
+    	announce_channel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
+*Following players head over to Match Draft:*\n
+${mentions}\n
+❯❯❯\t\t*end of match announcement*\t\t❮❮❮\n
+	`)
     
-    const pugs_channel = client.channels.get(process.env.PUGS_CHANNEL)
-      pugs_channel.send('Lets go!')
+    const pugs_channel = guild.client.channels.get(process.env.PUGS_CHANNEL)
+      pugs_channel.send('We have 12 players, lets go! (check #announcement for more details)')
     
     // Empty queue
     this.queue.length = 0
