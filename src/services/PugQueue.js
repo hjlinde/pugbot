@@ -33,24 +33,22 @@ export class PugQueue {
       return
     }
 
-    this.gameCounter += 1
-    const tempChannelName = `pug-${this.gameCounter}`
-
     let mentions = ``
     this.queue.forEach(member => {
       mentions += `${member}\n`
     })
 
-    // Announce game start
+    // Announce game start and alert players
     const announce_channel = guild.client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
-    	announce_channel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
+    announce_channel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
 *Following players head over to Match Draft:*\n
 ${mentions}\n
 ❯❯❯\t\t*end of match announcement*\t\t❮❮❮\n
 	`)
     
+    // Notification for queue full
     const pugs_channel = guild.client.channels.get(process.env.PUGS_CHANNEL)
-      pugs_channel.send('We have 12 players, lets go! (check #announcement for more details)')
+    pugs_channel.send(`We have our 12 players, lets go!`)
     
     // Empty queue
     this.queue.length = 0
