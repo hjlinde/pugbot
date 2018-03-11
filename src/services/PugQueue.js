@@ -1,4 +1,6 @@
 import { getFullName } from '../util'
+import { getRoles } from '../util'
+import { pug_map } from '../util'
 
 export class PugQueue {
   constructor () {
@@ -13,6 +15,7 @@ export class PugQueue {
 
   add (member) {
     const name = getFullName(member)
+    const pug_roles = getRoles(member)
 
     if (this.queue.includes(member)) {
       return `${name} is already queued.`
@@ -25,24 +28,30 @@ export class PugQueue {
     this.queue.push(member)
     member.addRole(process.env.PUGS_ROLE)
 
-    return `${String.fromCodePoint(0x2705)} ${name} added to queue. ${this.getQueueState()}`
+    return `${String.fromCodePoint(0x2705)} ${name} ${pug_roles} added to queue. ${this.getQueueState()}`
   }
 
   attemptGameStart (guild) {
-    if (this.queue.length < process.env.TEAM_SIZE * 2) {
+    if (this.queue.length < process.env.TEAM_SIZE * 1) {
       return
     }
 
     let mentions = ``
     this.queue.forEach(member => {
-      mentions += `${member}\n`
+      const name = getFullName(member)
+      const pug_roles = getRoles(member)
+      mentions += `${member} ${pug_roles}\n`
     })
 
     // Announce game start and alert players
     const announce_channel = guild.client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
+    const map = pug_map()
     announce_channel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
 *Following players head over to Match Draft:*\n
 ${mentions}\n
+
+${map}
+
 ❯❯❯\t\t*end of match announcement*\t\t❮❮❮\n
 	`)
     
