@@ -1,4 +1,6 @@
-import { getFullName } from '../util'
+//PugQueue.js
+
+import {getFullName} from '../util'
 
 export class PugQueue {
   constructor () {
@@ -40,10 +42,10 @@ export class PugQueue {
 
     // Announce game start and alert players
     const announce_channel = guild.client.channels.get(process.env.PUGS_ANNOUNCEMENTCHANNEL)
-    announce_channel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
+    announce_channel.send(`❮❮❮ \t\t **Match Starting!** \t\t ❯❯❯\n
 *Following players head over to Match Draft:*\n
 ${mentions}\n
-❯❯❯\t\t*end of match announcement*\t\t❮❮❮\n
+❯❯❯\t*End of Announcement*\t❮❮❮\n
 	`)
     
     // Notification for queue full
