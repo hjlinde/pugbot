@@ -32,7 +32,7 @@ export class PugQueue {
   }
 
   attemptGameStart (guild) {
-    if (this.queue.length < process.env.TEAM_SIZE * 1) {
+    if (this.queue.length < process.env.TEAM_SIZE * 2) {
       return
     }
 
