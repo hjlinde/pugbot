@@ -46,15 +46,14 @@ export class PugQueue {
     announceChannel.send(`❮❮❮\t\t **Match Starting!**\t\t ❯❯❯\n
 *Following players head over to Match Draft:*\n
 ${mentions}\n
-
-${map}
-
+${map}\n
 ❯❯❯\t\t*end of match announcement*\t\t❮❮❮\n
 `)
 
     // Notification for queue full
     const pugsChannel = guild.client.channels.get(process.env.PUGS_CHANNEL)
-    pugsChannel.send(`We have our 12 players, lets go!`)
+    const teamSize = process.env.TEAM_SIZE * 2
+    pugsChannel.send(`We have our ${teamSize} players, lets go! Check ${announceChannel} for detail.`)
 
     // Empty queue
     this.queue.length = 0
