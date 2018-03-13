@@ -5,7 +5,7 @@ export function help () {
     const embed = new RichEmbed()
 
     embed.setTitle('Pickups Commands')
-        .setColor(Constants.Colors.BLUE)
+      .setColor(Constants.Colors.BLUE)
 
     let text = ``
     text += printCommand(commands.get('help'))
@@ -19,7 +19,7 @@ export function help () {
     embed.setDescription(text)
 
     embed.addField('How to join in on the action',
-        `1. Add your in-game roles (!tank, !dps, !support).
+      `1. Add your in-game roles (!tank, !dps, !support).
 2. Add yourself to the queue (!pugs).
 3. When the queue is full, you will be notified.
 4. Join the relevant Match Draft voice channel.
