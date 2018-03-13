@@ -7,7 +7,7 @@ export function remove () {
 
   return {
     handler,
-    triggers: ['done'],
+    triggers: ['done', 'remove'],
     group: 'pugs',
     description: 'Remove yourself from the pugs queue.'
   }
