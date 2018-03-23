@@ -52,8 +52,7 @@ ${map}\n
 
     // Notification for queue full
     const pugsChannel = guild.client.channels.get(process.env.PUGS_CHANNEL)
-    const teamSize = process.env.TEAM_SIZE * 2
-    pugsChannel.send(`We have our ${teamSize} players, lets go! Check ${announceChannel} for detail.`)
+    pugsChannel.send(`We have our ${process.env.TEAM_SIZE * 2} players, lets go! Check ${announceChannel} for more details.`)
 
     // Empty queue
     this.queue.length = 0

@@ -35,7 +35,7 @@ export function rollMap () {
 
   return {
     handler,
-    triggers: ['rollmap', 'maproll', 'rollMap'],
+    triggers: ['rollmap', 'rollMap', 'maproll', 'mapRoll'],
     middleware: [
       deleteCommandMsg()
     ],
