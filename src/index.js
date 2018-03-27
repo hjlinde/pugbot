@@ -7,3 +7,5 @@ pugBot.loadCommands(commands)
 pugBot.loadServices()
 pugBot.applyPugsMiddleware()
 pugBot.start()
+
+const web = require('../web')

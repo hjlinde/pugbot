@@ -19,11 +19,15 @@
   "author": "joshramsbottom",
   "license": "MIT",
   "dependencies": {
+    "azure-storage": "^2.8.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "discord.js": "^11.3.2",
     "dotenv": "^5.0.1",
-    "ghastly": "^0.4.1"
+    "express": "^4.16.3",
+    "ghastly": "^0.4.1",
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "nodemon": "^1.14.8"
