@@ -1,9 +1,9 @@
+import { updateDatabaseInfo, getDatabaseInfo } from './dbFunctions'
+
 require('dotenv').config()
 const express = require('express')
 const app = express()
 const request = require('request-promise-native')
-var azure = require('azure-storage')
-
 const port = process.env.PORT || 8080
 
 function getDiscordUserInfo (token) {
@@ -20,41 +20,6 @@ function getDiscordUserInfo (token) {
   })
 }
 
-function getBattlenetConnection (connectionInfo) {
-  return connectionInfo.find(function (itm) {
-    return itm['type'] === 'battlenet'
-  })
-}
-
-function updateAzureTableInfo (userInfo, battleConnectionInfo, token) {
-  return new Promise(function (resolve, reject) {
-    console.log('Updating Azure table storage record')
-    var tableSvc = azure.createTableService()
-    tableSvc.createTableIfNotExists('discord', function (error, result, response) {
-      if (!error) {
-        var entGen = azure.TableUtilities.entityGenerator
-        var record = {
-          PartitionKey: entGen.String('discord'),
-          RowKey: entGen.String(userInfo.id),
-          DiscordAccessToken: entGen.String(token),
-          DiscordUsername: entGen.String(userInfo.username),
-          DiscordDiscriminator: entGen.String(userInfo.discriminator),
-          BattleTag: entGen.String(battleConnectionInfo.name),
-          BattleID: entGen.String(battleConnectionInfo.id),
-          BattleRank: entGen.Int32(0)
-        }
-        tableSvc.insertOrReplaceEntity('discord', record, function (error, result, response) {
-          if (error) {
-            reject(new Error('Azure insert/replace failed.'))
-          }
-          console.log('Azure record updated')
-          resolve()
-        })
-      }
-    })
-  })
-}
-
 function getDiscordUserConnections (token) {
   return new Promise(function (resolve, reject) {
     console.log('Requesting discord connection info with token: ' + token)
@@ -66,6 +31,12 @@ function getDiscordUserConnections (token) {
       var json = JSON.parse(result)
       resolve(json)
     })
+  })
+}
+
+function getBattleTag (connectionInfo) {
+  return connectionInfo.find(function (itm) {
+    return itm['type'] === 'battlenet'
   })
 }
 
@@ -96,7 +67,7 @@ app.get('/callback', (req, res) => {
       userinfoJson = info
       getDiscordUserConnections(accessToken).then(function (info) {
         connectioninfo = JSON.stringify(info)
-        var battlenet = getBattlenetConnection(info)
+        var battlenet = getBattleTag(info)
 
         if (battlenet === undefined) {
           console.log("No connection found with type 'battlenet'")
@@ -106,7 +77,7 @@ app.get('/callback', (req, res) => {
           res.end()
         } else {
           console.log('Battlenet connection found')
-          updateAzureTableInfo(userinfoJson, battlenet, accessToken).then(function () {
+          updateDatabaseInfo(userinfoJson, battlenet, accessToken).then(function () {
             res.setHeader('Content-Type', 'text/html')
             res.writeHead(res.statusCode)
             res.write('OAuth2 Access Token: ' + accessToken)
@@ -129,5 +100,5 @@ app.listen(port, (err) => {
     return console.log('something bad happened', err)
   }
 
-  console.log(`Express running on ${port}`)
+  console.log(`Express running on port ${port}...`)
 })

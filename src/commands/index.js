@@ -8,6 +8,7 @@ import { help } from './help'
 import { addRole } from './addRole'
 import { rollMap } from './rollMap'
 import { adminRemove } from './adminRemove'
+import { profile } from './profile'
 
 export const commands = [
   add,
@@ -20,5 +21,6 @@ export const commands = [
   () => addRole(process.env.DPS_ROLE, 'dps'),
   () => addRole(process.env.SUPPORT_ROLE, 'support'),
   rollMap,
-  adminRemove
+  adminRemove,
+  profile
 ]
