@@ -44,6 +44,9 @@ function updateAzureTableInfo (userInfo, battleConnectionInfo, token) {
           BattleRank: entGen.Int32(0)
         }
         tableSvc.insertOrReplaceEntity('discord', record, function (error, result, response) {
+          if (error) {
+            reject(new Error('Azure insert/replace failed.'))
+          }
           console.log('Azure record updated')
           resolve()
         })
