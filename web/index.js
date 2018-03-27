@@ -8,10 +8,12 @@ const port = process.env.PORT || 8080
 
 function getDiscordUserInfo (token) {
   return new Promise(function (resolve, reject) {
+    console.log('Requesting discord user info with token: ' + token)
     request({url: 'https://discordapp.com/api/users/@me',
       method: 'GET',
       headers: {'Authorization': 'Bearer ' + token}
     }).then(function (result) {
+      console.log('Received user info:' + result + '\r\n\r\n')
       var json = JSON.parse(result)
       resolve(json)
     })
@@ -26,6 +28,7 @@ function getBattlenetConnection (connectionInfo) {
 
 function updateAzureTableInfo (userInfo, battleConnectionInfo, token) {
   return new Promise(function (resolve, reject) {
+    console.log('Updating Azure table storage record')
     var tableSvc = azure.createTableService()
     tableSvc.createTableIfNotExists('discord', function (error, result, response) {
       if (!error) {
@@ -41,6 +44,7 @@ function updateAzureTableInfo (userInfo, battleConnectionInfo, token) {
           BattleRank: entGen.Int32(0)
         }
         tableSvc.insertOrReplaceEntity('discord', record, function (error, result, response) {
+          console.log('Azure record updated')
           resolve()
         })
       }
@@ -50,10 +54,12 @@ function updateAzureTableInfo (userInfo, battleConnectionInfo, token) {
 
 function getDiscordUserConnections (token) {
   return new Promise(function (resolve, reject) {
+    console.log('Requesting discord connection info with token: ' + token)
     request({url: 'https://discordapp.com/api/users/@me/connections',
       method: 'GET',
       headers: {'Authorization': 'Bearer ' + token}
     }).then(function (result) {
+      console.log('Received connection info:' + result + '\r\n\r\n')
       var json = JSON.parse(result)
       resolve(json)
     })
@@ -73,10 +79,10 @@ app.get('/callback', (req, res) => {
       redirect_uri: process.env.REDIRECT_URI || 'http://localhost:8080/callback'
     }
   }).then(function (result) {
-    console.log(result)
+    // console.log(result);
     var json = JSON.parse(result)
-    var accessToken = json['accessToken']
-    console.log(accessToken)
+    var accessToken = json['access_token']
+    console.log('\r\nCode swapped for access token. access_token = ' + accessToken + '\r\n')
 
     var userinfo = ''
     var userinfoJson = ''
@@ -87,15 +93,16 @@ app.get('/callback', (req, res) => {
       userinfoJson = info
       getDiscordUserConnections(accessToken).then(function (info) {
         connectioninfo = JSON.stringify(info)
-        console.log(info[0].type)
         var battlenet = getBattlenetConnection(info)
 
         if (battlenet === undefined) {
+          console.log("No connection found with type 'battlenet'")
           res.setHeader('Content-Type', 'text/html')
           res.writeHead(res.statusCode)
           res.write('No battle.net connection found')
           res.end()
         } else {
+          console.log('Battlenet connection found')
           updateAzureTableInfo(userinfoJson, battlenet, accessToken).then(function () {
             res.setHeader('Content-Type', 'text/html')
             res.writeHead(res.statusCode)
@@ -119,6 +126,5 @@ app.listen(port, (err) => {
     return console.log('something bad happened', err)
   }
 
-  console.log(`server is listening on ${port}`)
+  console.log(`Express running on ${port}`)
 })
-
