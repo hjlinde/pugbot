@@ -26,6 +26,7 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "ghastly": "^0.4.1",
+    "overwatch-js": "^1.6.1",
     "request": "^2.85.0",
     "request-promise-native": "^1.0.5"
   },

@@ -1,19 +1,31 @@
 import { Constants, RichEmbed } from 'discord.js'
-import { getDatabaseInfo } from '../../web/dbFunctions'
-import { getFullName, getRoleEmoji} from '../util'
+import { getDatabaseInfo, getBattleTagRank, updateRankInfo } from '../../web/dbFunctions'
+import { getRoleEmoji } from '../util'
 
 export function profile () {
   async function handler ({ message }) {
-    var dbInfo = await getDatabaseInfo(message.author.id)
-    const name = getFullName(message.member)
+    var battleTag = 'N/A'
+    var owRank = 'N/A'
+
+    try {
+      var dbInfo = await getDatabaseInfo(message.author.id)
+      owRank = await getBattleTagRank(dbInfo.BattleTag)
+      battleTag = dbInfo.BattleTag
+
+      if (dbInfo.BattleRank !== owRank) {
+        updateRankInfo(message.author.id, owRank)
+      }
+    } catch (e) {
+    }
+
+    const name = message.author.username
     const roleEmoji = getRoleEmoji(message.member)
-    const owRank = '3148'
-    
+
     const embed = new RichEmbed()
-    embed.setTitle(`${name}'s PUGS Profile`)
+    embed.setTitle(`${name}'s Profile`)
       .setColor(Constants.Colors.GREEN)
 
-    embed.addField('BattleTag', `${dbInfo.BattleTag}`, true)
+    embed.addField('BattleTag', `${battleTag}`, true)
     embed.addField('Rank', `${owRank}`, true)
     embed.addField('Roles', `${roleEmoji}`, true)
 
@@ -22,6 +34,7 @@ export function profile () {
 
   return {
     handler,
+    group: 'pugs',
     triggers: ['profile']
   }
 }

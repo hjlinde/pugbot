@@ -26,7 +26,7 @@ export class PugQueue {
     this.queue.push(member)
     member.addRole(process.env.PUGS_ROLE)
 
-    return `${String.fromCodePoint(0x2705)} ${name} ${roleEmoji} added to queue. ${this.getQueueState()}`
+    return `${String.fromCodePoint(0x2705)} ${name} as ${roleEmoji} added to queue. ${this.getQueueState()}`
   }
 
   attemptGameStart (guild) {

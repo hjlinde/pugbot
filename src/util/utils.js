@@ -3,7 +3,7 @@ export function getFullName (member) {
 }
 
 export function getRoleEmoji (member) {
-  let roles = ``
+  var roles = ``
   if (member.roles.has(process.env.DPS_ROLE)) {
     roles += process.env.DPS_EMOJI
   }
@@ -13,5 +13,5 @@ export function getRoleEmoji (member) {
   if (member.roles.has(process.env.SUPPORT_ROLE)) {
     roles += process.env.SUPPORT_EMOJI
   }
-  return roles
+  return roles || 'N/A'
 }

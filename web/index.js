@@ -1,4 +1,4 @@
-import { updateDatabaseInfo, getDatabaseInfo } from './dbFunctions'
+import { updateDatabaseInfo, getBattleTagRank } from './dbFunctions'
 
 require('dotenv').config()
 const express = require('express')
@@ -76,16 +76,18 @@ app.get('/callback', (req, res) => {
           res.write('No battle.net connection found')
           res.end()
         } else {
-          console.log('Battlenet connection found')
-          updateDatabaseInfo(userinfoJson, battlenet, accessToken).then(function () {
-            res.setHeader('Content-Type', 'text/html')
-            res.writeHead(res.statusCode)
-            res.write('OAuth2 Access Token: ' + accessToken)
-            res.write('<br/><br/>\r\n')
-            res.write('Discord User Info: ' + userinfo)
-            res.write('<br/><br/>\r\n')
-            res.write('Connection Info: ' + JSON.stringify(battlenet))
-            res.end()
+          getBattleTagRank(battlenet.id).then(function (rank) {
+            console.log('Battlenet connection found')
+            updateDatabaseInfo(userinfoJson, battlenet, accessToken, rank).then(function () {
+              res.setHeader('Content-Type', 'text/html')
+              res.writeHead(res.statusCode)
+              res.write('OAuth2 Access Token: ' + accessToken)
+              res.write('<br/><br/>\r\n')
+              res.write('Discord User Info: ' + userinfo)
+              res.write('<br/><br/>\r\n')
+              res.write('Connection Info: ' + JSON.stringify(battlenet))
+              res.end()
+            })
           })
         }
       })
