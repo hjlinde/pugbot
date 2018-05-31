@@ -16,7 +16,7 @@ export function updateDatabaseInfo (userInfo, battlenetInfo, token, rank) {
           DiscordDiscriminator: entGen.String(userInfo.discriminator),
           BattleTag: entGen.String(battlenetInfo.name),
           BattleID: entGen.String(battlenetInfo.id),
-          BattleRank: entGen.Int32(rank)
+          BattleRank: entGen.Int32(rank || '0')
         }
         tableService.insertOrReplaceEntity('discord', record, function (error, result, response) {
           if (error) {
@@ -36,14 +36,16 @@ export function updateRankInfo (discordUserID, battlenetRank) {
     var tableService = azure.createTableService()
     tableService.createTableIfNotExists('discord', function (error, result, response) {
       if (!error) {
+        console.log("Storing battlenetRank: "+(parseInt(battlenetRank)||'0'))
         var entGen = azure.TableUtilities.entityGenerator
         var record = {
           PartitionKey: entGen.String('discord'),
           RowKey: entGen.String(discordUserID),
-          BattleRank: entGen.Int32(battlenetRank)
+          BattleRank: entGen.Int32(parseInt(battlenetRank) || '0')
         }
         tableService.mergeEntity('discord', record, function (error, result, response) {
           if (error) {
+            console.log(error)
             reject(new Error('Azure merge failed.'))
           }
           console.log('Azure record updated')

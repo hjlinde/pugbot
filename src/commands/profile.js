@@ -9,7 +9,7 @@ export function profile () {
 
     try {
       var dbInfo = await getDatabaseInfo(message.author.id)
-      owRank = await getBattleTagRank(dbInfo.BattleTag)
+      owRank = await getBattleTagRank(dbInfo.BattleTag) || 'N/A'
       battleTag = dbInfo.BattleTag
 
       if (dbInfo.BattleRank !== owRank) {
